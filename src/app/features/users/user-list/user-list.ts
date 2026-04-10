@@ -1,10 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../core/services/user';
 import { User } from '../../../core/models/user';
 import { Subject, debounceTime, catchError, of } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserFormModal } from '../user-form-modal/user-form-modal';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-list',
@@ -16,12 +17,13 @@ export class UserList implements OnInit {
 
   private service = inject(UserService);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
-  users: User[] = [];
-  filteredUsers: User[] = [];
+  users = signal<User[]>([]);
+  filteredUsers = signal<User[]>([]);
 
-  loading = false;
-  error: string | null = null;
+  loading = signal(false);
+  error = signal<string | null>(null);
 
   private search$ = new Subject<string>();
 
@@ -29,29 +31,34 @@ export class UserList implements OnInit {
     this.loadUsers();
 
     this.search$
-      .pipe(debounceTime(300))
+      .pipe(
+        debounceTime(300),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe(value => {
-        this.filteredUsers = this.users.filter(user =>
-          user.name.toLowerCase().includes(value.toLowerCase())
+        this.filteredUsers.set(
+          this.users().filter(user =>
+            user.name.toLowerCase().includes(value.toLowerCase())
+          )
         );
       });
   }
 
   loadUsers() {
-    this.loading = true;
-    this.error = null;
+    this.loading.set(true);
+    this.error.set(null);
 
     this.service.getUsers()
       .pipe(
         catchError(() => {
-          this.error = 'Erro ao carregar usuários';
+          this.error.set('Erro ao carregar usuários');
           return of([]);
         })
       )
       .subscribe(data => {
-        this.users = data;
-        this.filteredUsers = data;
-        this.loading = false;
+        this.users.set(data);
+        this.filteredUsers.set(data);
+        this.loading.set(false);
       });
   }
 

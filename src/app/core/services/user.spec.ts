@@ -1,16 +1,30 @@
-import { TestBed } from '@angular/core/testing';
+import { UserService } from './user';
 
-import { User } from './user';
-
-describe('User', () => {
-  let service: User;
+describe('UserService', () => {
+  let service: UserService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(User);
+    service = new UserService();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('should return users', () => {
+    service.getUsers().subscribe(users => {
+      expect(users.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('should create a user', () => {
+    const newUser = {
+      id: '3',
+      name: 'Teste',
+      email: 'teste@email.com',
+      cpf: '333',
+      phone: '7777',
+      phoneType: 'mobile' as 'mobile'
+    };
+
+    service.createUser(newUser).subscribe(user => {
+      expect(user.name).toBe('Teste');
+    });
   });
 });
