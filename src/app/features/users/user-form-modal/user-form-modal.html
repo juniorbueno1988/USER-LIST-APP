@@ -20,8 +20,12 @@
     <option value="work">Work</option>
   </select>
 
-  <button (click)="save()" [disabled]="form.invalid">
+  <button type="button" (click)="save()" [disabled]="form.invalid">
     Salvar
+  </button>
+
+  <button type="button" mat-dialog-close>
+    Cancelar
   </button>
 
 </form>

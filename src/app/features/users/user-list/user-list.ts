@@ -11,7 +11,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'app-user-list',
   standalone: true,
   imports: [CommonModule, MatDialogModule],
-  templateUrl: './user-list.html'
+  templateUrl: './user-list.html',
+  styleUrls: ['./user-list.scss']
 })
 export class UserList implements OnInit {
 

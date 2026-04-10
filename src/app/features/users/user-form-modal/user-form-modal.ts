@@ -9,13 +9,14 @@ import { User } from '../../../core/models/user';
   selector: 'app-user-form-modal',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './user-form-modal.html'
+  templateUrl: './user-form-modal.html',
+  styleUrls: ['./user-form-modal.scss'] // 🔥 ESSENCIAL (era isso que faltava pro seu SCSS funcionar)
 })
 export class UserFormModal {
 
   private fb = inject(FormBuilder);
   private service = inject(UserService);
-  private dialogRef = inject(MatDialogRef);
+  private dialogRef = inject(MatDialogRef<UserFormModal>);
 
   form = this.fb.group({
     id: [''],
