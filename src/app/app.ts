@@ -1,12 +1,10 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { UserList } from './features/users/user-list/user-list';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.sass'
+  standalone: true,
+  imports: [UserList],
+  template: `<app-user-list></app-user-list>`
 })
-export class App {
-  protected readonly title = signal('user-list-app');
-}
+export class App {}
