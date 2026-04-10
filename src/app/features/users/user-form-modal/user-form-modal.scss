@@ -1,0 +1,17 @@
+.title {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 350px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
