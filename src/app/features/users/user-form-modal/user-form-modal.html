@@ -1,0 +1,27 @@
+<h2>Usuário</h2>
+
+<form [formGroup]="form">
+
+  <input formControlName="name" placeholder="Nome" />
+  <div *ngIf="form.get('name')?.invalid">Nome obrigatório</div>
+
+  <input formControlName="email" placeholder="Email" />
+  <div *ngIf="form.get('email')?.invalid">Email inválido</div>
+
+  <input formControlName="cpf" placeholder="CPF" />
+  <div *ngIf="form.get('cpf')?.invalid">CPF obrigatório</div>
+
+  <input formControlName="phone" placeholder="Telefone" />
+  <div *ngIf="form.get('phone')?.invalid">Telefone obrigatório</div>
+
+  <select formControlName="phoneType">
+    <option value="mobile">Mobile</option>
+    <option value="home">Home</option>
+    <option value="work">Work</option>
+  </select>
+
+  <button (click)="save()" [disabled]="form.invalid">
+    Salvar
+  </button>
+
+</form>

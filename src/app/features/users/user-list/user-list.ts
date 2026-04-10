@@ -3,16 +3,19 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../../core/services/user';
 import { User } from '../../../core/models/user';
 import { Subject, debounceTime, catchError, of } from 'rxjs';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { UserFormModal } from '../user-form-modal/user-form-modal';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatDialogModule],
   templateUrl: './user-list.html'
 })
 export class UserList implements OnInit {
 
   private service = inject(UserService);
+  private dialog = inject(MatDialog);
 
   users: User[] = [];
   filteredUsers: User[] = [];
@@ -54,5 +57,15 @@ export class UserList implements OnInit {
 
   onSearch(event: any) {
     this.search$.next(event.target.value);
+  }
+
+  openModal(user?: User) {
+    const dialogRef = this.dialog.open(UserFormModal, {
+      data: user
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.loadUsers();
+    });
   }
 }

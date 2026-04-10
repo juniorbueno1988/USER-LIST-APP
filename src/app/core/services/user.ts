@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { of, delay } from 'rxjs';
+import { of, delay, throwError } from 'rxjs';
 import { User } from '../models/user';
 
 @Injectable({
@@ -28,5 +28,18 @@ export class UserService {
 
   getUsers() {
     return of(this.users).pipe(delay(800));
+  }
+
+  createUser(user: User) {
+    this.users.push(user);
+    return of(user).pipe(delay(500));
+  }
+
+  updateUser(user: User) {
+    const index = this.users.findIndex(u => u.id === user.id);
+    if (index === -1) return throwError(() => new Error('User not found'));
+
+    this.users[index] = user;
+    return of(user).pipe(delay(500));
   }
 }
